@@ -3,7 +3,7 @@ awardspdf-casper
 
 Description:
 
-Logins into drupal, goes to the startpath and looks for '.next a' and continues to capture pages and click next until '.next a' is not find.
+Logins into drupal, goes to the startpath and looks for '.next a' and continues to capture pages and click next until '.next a' is not found.
 
 Install:
 
