@@ -16,3 +16,8 @@ run:
 ```
 casperjs clickwhilenext.js [startpath]
 ```
+
+wrapper:
+```
+clickwhilenext.sh '1234 12345'
+```
