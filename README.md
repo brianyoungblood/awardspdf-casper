@@ -14,7 +14,7 @@ script has several areas that needs editing for environment you are on. tested o
 
 run:
 ```
-casperjs clickwhilenext.js [startpath]
+casperjs clickwhilenext.js --user=[username] --password=[password] --siteurl="[siteurl]" --appid=[appid] --savepath="[startpath]"
 ```
 
 wrapper:
