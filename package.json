@@ -1,0 +1,8 @@
+{
+  "name": "pdfapps",
+  "version": "0.0.1",
+  "description": "Use CasperJS to visit pages and save screenshots.",
+  "main": "pdfapps.js",
+  "dependencies": {},
+  "devDependencies": {}
+}
