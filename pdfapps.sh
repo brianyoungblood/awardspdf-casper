@@ -20,7 +20,7 @@ if [[ -f $zipfile ]]; then
         cd $scripthome
 else
 echo "File $zipfile not found."
-casperjs clickwhilenext.js --user=$username --password=$password --siteurl="$siteurl" --appid=$app --savepath="$savepath"
+casperjs pdfapps.js --user=$username --password=$password --siteurl="$siteurl" --appid=$app --savepath="$savepath"
         cd $savepath/$app/generated_pdfs
         zip all_pages.zip *
         ls -lah .
