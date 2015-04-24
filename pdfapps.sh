@@ -1,12 +1,13 @@
 #!/bin/bash
 
-savepath=/var/www/awards.practicegreenhealth.org/htdocs/sites/default/files/private/application
-scripthome=`pwd`
-username=''
-password=''
-siteurl='https://awards.practicegreenhealth.org'
 
-apps=($1)
+username=$1
+password=$2
+savepath=$3
+siteurl=$4
+apps=($5)
+
+scripthome=`pwd`
 for app in "${apps[@]}"
 do
 echo "---- Starting application/$app -----"
@@ -20,7 +21,7 @@ if [[ -f $zipfile ]]; then
         cd $scripthome
 else
 echo "File $zipfile not found."
-casperjs pdfapps.js --user=$username --password=$password --siteurl="$siteurl" --appid=$app --savepath="$savepath"
+casperjs --ssl-protocol=any pdfapps.js --user=$username --password=$password --siteurl="$siteurl" --appid=$app --savepath="$savepath"
         cd $savepath/$app/generated_pdfs
         zip all_pages.zip *
         ls -lah .
