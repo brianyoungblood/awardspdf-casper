@@ -4,7 +4,10 @@ var casper = require('casper').create({
     clientScripts: ["lib/jquery-1.11.0.min.js", "lib/jquery.autogrow-textarea.js", "lib/jquery.autosize.input.js"],
 });
 
-
+casper.options.pageSettings = {
+    userName: 'open',
+    password: 'sesame'
+};
 
 //pull args from commandline
 var _adminUser = casper.cli.get('user');
@@ -39,7 +42,7 @@ casper.clickWhileSelector = function (selector) {
             $('.question-debug-info').hide();
             $('.form-textarea').css('overflow', 'hidden').autogrow();
             $('.form-text').css('max-width', '960px').autosizeInput();
-            return window.location.pathname.split("/").splice(-1, 1);
+            return $("#category-title-raw").text();
 
         });
         this.waitUntilVisible('.print-page',
