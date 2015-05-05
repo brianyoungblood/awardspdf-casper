@@ -35,6 +35,13 @@ casper.clickWhileSelector = function (selector) {
             $('#memcache-devel').hide();
             $('.question-admin').hide();
             $('.comment-form').hide();
+            //hide comment boxes if no text found.
+            $('div.print-only').each(function () {
+                var $this = $(this);
+                if ($this.find('.comment').text() == '')
+                    $this.hide();
+            });
+            $('div.print-only:empty').hide();
             $('.glossify-link').css('background-image', 'none').css('padding-right', '0px');
             $('#block-devel-switch-user').hide();
             $('.messages--warning.messages.warning').hide();
