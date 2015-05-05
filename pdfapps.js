@@ -39,9 +39,8 @@ casper.clickWhileSelector = function (selector) {
             $('div.print-only').each(function () {
                 var $this = $(this);
                 if ($this.find('.comment').text() == '')
-                    $this.hide();
+                    $('div.print-only').hide();
             });
-            $('div.print-only:empty').hide();
             $('.glossify-link').css('background-image', 'none').css('padding-right', '0px');
             $('#block-devel-switch-user').hide();
             $('.messages--warning.messages.warning').hide();
