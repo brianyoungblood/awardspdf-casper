@@ -36,10 +36,19 @@ casper.clickWhileSelector = function (selector) {
             $('.question-admin').hide();
             $('.comment-form').hide();
             //hide comment boxes if no text found.
-            $('div.print-only').each(function () {
-                var $this = $(this);
-                if ($this.find('.comment').text() == '')
-                    $('div.print-only').hide();
+            var questioncomment = $('div.question-comment');
+
+            questioncomment.each(function (index) {
+                var questioncomment = $(this);
+                var span = questioncomment.find('span');
+                text = span.text();
+                if (text.length === 0) {
+                    console.log(index + ": " + span.text() + " length " + text.length + " hide it");
+                    questioncomment.hide();
+                    questioncomment.css("display", "none !important;");
+                } else {
+                    console.log(index + ": " + span.text() + " length " + text.length + " keep it");
+                }
             });
             $('.glossify-link').css('background-image', 'none').css('padding-right', '0px');
             $('#block-devel-switch-user').hide();
