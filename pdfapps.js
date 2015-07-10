@@ -92,16 +92,16 @@ casper.pghGetApplicationPages = function() {
     var pagetitle = this.pghGetPageTitle();
     this.pghAlterPage();
     this.wait(2000);
-    casper.waitUntilVisible('.section #question-load-done', function then() {
-        console.log('Looks like question-load-done is on ' + pagetitle);
+    casper.waitForSelector('#question-load-done', function then() {
+        console.log('Looks like #question-load-done is on ' + pagetitle);
         this.pghCapturePage(pagetitle);
         this.wait(2000);
         console.log('Looking for the next page');
         this.pghNextPage();
     }, function timeout() {
-        console.log('Waited on question-load-done for too long.');
-        this.then(this.getApplicationPages);
-    }, 25000);
+        console.log('Waited on #question-load-done for too long. Wait again');
+        this.then(getApplicationPages);
+    }, 60000);
 
 
 };
@@ -120,7 +120,6 @@ casper.start(_loginURL, function () {
             }, false);
             this.click('button#edit-submit.form-submit');
             this.wait(2000);
-            this.capture(_saveCapturePath + '/' + _appID + '/login.pdf');
 
         }, function timeout() { // step to execute if check has failed
             this.echo("Timed out trying to get to " + _loginURL).exit();
