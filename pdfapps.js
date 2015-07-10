@@ -4,7 +4,7 @@ var casper = require('casper').create({
     clientScripts: ["lib/jquery-1.11.0.min.js", "lib/jquery.autogrow-textarea.js", "lib/jquery.autosize.input.js"]
 });
 
-var colorizer = require('colorizer').create('Colorizer');
+
 
 
 casper.options.pageSettings = {
@@ -94,7 +94,6 @@ casper.pghGetApplicationPages = function() {
     var pagetitle = this.pghGetPageTitle();
     this.pghAlterPage();
     this.wait(5000);
-    console.log(colorizer.colorize("Hello World", "INFO"));
     casper.waitUntilVisible('.print-page', function then() {
         console.log('Looks like .print-page is on ' + pagetitle);
         this.pghCapturePage(pagetitle);
@@ -162,11 +161,11 @@ casper.page.paperSize = {
 casper.thenOpen(_baseURL + _thenStartPath, function (response) {
     if (response['status'] === 200) {
         console.log('On first page of application. Response ' + response['status']);
-        casper.pghGetApplicationPages();
+        this.pghGetApplicationPages();
 
     } else {
         console.log('Error ' + response['status'] + ' url ' + _baseURL + _thenStartPath);
-        return FALSE;
+        this.exit();
     }
 
 });
