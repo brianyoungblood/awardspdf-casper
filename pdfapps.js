@@ -93,15 +93,15 @@ casper.pghGetApplicationPages = function() {
     this.pghAlterPage();
     this.wait(2000);
     casper.waitUntilVisible('.section #question-load-done', function then() {
-        console.log('Looks like span.done is on ' + pagetitle);
+        console.log('Looks like question-load-done is on ' + pagetitle);
         this.pghCapturePage(pagetitle);
         this.wait(2000);
         console.log('Looking for the next page');
         this.pghNextPage();
     }, function timeout() {
-        console.log('Waited on .print-page for too long. Wait again');
-        this.then(getApplicationPages);
-    }, 15000);
+        console.log('Waited on question-load-done for too long.');
+        this.then(this.getApplicationPages);
+    }, 25000);
 
 
 };
