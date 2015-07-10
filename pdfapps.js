@@ -3,7 +3,11 @@ var casper = require('casper').create({
     //logLevel: "debug",
     clientScripts: ["lib/jquery-1.11.0.min.js", "lib/jquery.autogrow-textarea.js", "lib/jquery.autosize.input.js"]
 });
-
+var fs = require('fs');
+var date = new Date();
+var dateString = ("0" + (date.getMonth() + 1).toString()).substr(-2) + "-" + ("0" + date.getDate().toString()).substr(-2)  + "-" + date.getFullYear();
+var fname = dateString + '_attempted.log';
+var error_file = dateString + '_failed.log';
 
 casper.options.pageSettings = {
     userName: 'open',
@@ -24,6 +28,24 @@ var _loginPath = '/user';
 var _loginURL = _baseURL + _loginPath;
 var _thenStartPath = '/application/' + _appID;
 
+casper.pghDebug = function(text, status) {
+
+    console.log(text);
+    try {
+        fs.write(fname, text, 'a');
+    } catch(e) {
+        console.log(e);
+    }
+    if (status == 'failed') {
+        try {
+            fs.write(error_file, text, 'a');
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+}
+
 //Tweak the page for printing
 casper.pghAlterPage = function() {
     this.evaluate(function () {
@@ -38,10 +60,12 @@ casper.pghAlterPage = function() {
             var span = questioncomment.find('span');
             text = span.text();
             if (text.length === 0) {
+                //Todo: Hide client side console messages
                 console.log(index + ": " + span.text() + " length " + text.length + " hide it");
                 questioncomment.hide();
                 questioncomment.css("display", "none !important;");
             } else {
+                //Todo: Hide client side console messages
                 console.log(index + ": " + span.text() + " length " + text.length + " keep it");
             }
         });
@@ -66,7 +90,7 @@ casper.pghGetPageTitle = function()  {
 
 //Grab a screenshot, and save as pdf (same as png, just add pdf extension
 casper.pghCapturePage = function(page_name) {
-    console.log('Capturing page ' + page_name);
+    this.pghDebug(_appID + '\tCapturing page ' + page_name + '\t[successful]\n');
     this.capture(_saveCapturePath + '/' + _appID + '/generated_pdfs/' + page_name + '.pdf', undefined, {
         format: 'pdf',
         quality: 20
@@ -77,12 +101,12 @@ casper.pghCapturePage = function(page_name) {
 casper.pghNextPage = function() {
     var nextLink = ".next a";
     if (this.visible(nextLink)) {
-        console.log('Found the next page');
+        this.pghDebug(_appID + '\tFound next page link.' + '\t[successful]\n');
         this.thenClick(nextLink);
         this.then(this.pghGetApplicationPages);
     } else {
         //must be done, no more selectors to click
-        console.log("No more pages to process. End.");
+        this.pghDebug(_appID + '\tNo more pages to process. End.\t[successful]\n');
         this.exit();
     }
 };
@@ -93,14 +117,11 @@ casper.pghGetApplicationPages = function() {
     this.pghAlterPage();
     this.wait(2000);
     casper.waitForSelector('#question-load-done', function then() {
-        console.log('Looks like #question-load-done is on ' + pagetitle);
         this.pghCapturePage(pagetitle);
         this.wait(2000);
-        console.log('Looking for the next page');
         this.pghNextPage();
     }, function timeout() {
-        console.log('Waited on #question-load-done for too long. Wait again');
-        this.then(getApplicationPages);
+        this.pghDebug(_appID + '\tmissing question-load-done' + '\t[failed]\n', 'failed');
     }, 60000);
 
 
@@ -112,17 +133,16 @@ casper.pghGetApplicationPages = function() {
 casper.start(_loginURL, function () {
 
     this.waitForSelector('form#user-login', function () {
-
-            console.log('Landed on login page');
             this.fill('form#user-login', {
                 name: _adminUser,
                 pass: _adminPass
             }, false);
             this.click('button#edit-submit.form-submit');
             this.wait(2000);
-
+            this.pghDebug(_appID + '\tlogin complete' + '\t[successful]\n');
         }, function timeout() { // step to execute if check has failed
-            this.echo("Timed out trying to get to " + _loginURL).exit();
+            this.pghDebug(_appID + '\tTimed out trying to get to login' + '\t[failed]\n','failed');
+            this.exit();
         }, 10000
     );
 });
@@ -159,12 +179,13 @@ casper.page.paperSize = {
 //Load the application before we begin looking for pages.
 casper.thenOpen(_baseURL + _thenStartPath, function (response) {
     if (response['status'] === 200) {
-        console.log('On first page of application. Response ' + response['status']);
+        this.pghDebug(_appID + '\tApplication reached with response ' + response['status'] + '\t[successful]\n');
+
         //Then loop over all pages of the application to capture pdfs
         this.then(casper.pghGetApplicationPages);
 
     } else {
-        console.log('Error ' + response['status'] + ' url ' + _baseURL + _thenStartPath);
+        this.pghDebug(_appID + '\tLoading page failed with response ' + response['status'] + '\t[failed]\n','failed');
         this.exit();
     }
 

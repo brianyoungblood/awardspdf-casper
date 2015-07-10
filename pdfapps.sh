@@ -55,7 +55,7 @@ if [[ -f $zipfile ]]; then
         cd $savepath/$app/generated_pdfs
         ls -lah .
         cd $scripthome
-        echo "skipping $app" >> attempted.log
+        echo "skipping $app" >> skipped.log
 else
 echo "File $zipfile not found."
 
@@ -70,7 +70,6 @@ casperjs --ssl-protocol=any pdfapps.js --user=$username --password=$password --s
         zip all_pages.zip *
         ls -lah .
         cd $scripthome
-        echo "attempting $app" >> attempted.log
 fi
 
 done
