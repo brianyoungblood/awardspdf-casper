@@ -19,5 +19,5 @@ casperjs pdfapps.js --user=[username] --password=[password] --siteurl="[siteurl]
 
 wrapper:
 ```
-pdfapps.sh '1234 12345'
+./pdfapps.sh --username="byoungblood+casperjs@practicegreenhealth.org" --password="xxx" --savepath="/Users/byoungblood/Downloads" --siteurl="https://awards.practicegreenhealth.org" --nids="1160629 " --recreate
 ```
