@@ -89,15 +89,15 @@ casper.pghNextPage = function() {
     }
 };
 
-//Process each pplication page
+//Process each application page
 casper.pghGetApplicationPages = function() {
     var pagetitle = this.pghGetPageTitle();
     this.pghAlterPage();
-    this.wait(5000);
-    casper.waitUntilVisible('.print-page', function then() {
-        console.log('Looks like .print-page is on ' + pagetitle);
+    this.wait(2000);
+    casper.waitUntilVisible('.section span.done', function then() {
+        console.log('Looks like span.done is on ' + pagetitle);
         this.pghCapturePage(pagetitle);
-        this.wait(5000);
+        this.wait(2000);
         console.log('Looking for the next page');
         this.pghNextPage();
     }, function timeout() {
@@ -121,6 +121,8 @@ casper.start(_loginURL, function () {
                 pass: _adminPass
             }, false);
             this.click('button#edit-submit.form-submit');
+            this.wait(2000);
+            this.capture(_saveCapturePath + '/' + _appID + '/login.pdf');
 
         }, function timeout() { // step to execute if check has failed
             this.echo("Timed out trying to get to " + _loginURL).exit();
@@ -161,7 +163,7 @@ casper.page.paperSize = {
 casper.thenOpen(_baseURL + _thenStartPath, function (response) {
     if (response['status'] === 200) {
         console.log('On first page of application. Response ' + response['status']);
-        this.pghGetApplicationPages();
+       // this.pghGetApplicationPages();
 
     } else {
         console.log('Error ' + response['status'] + ' url ' + _baseURL + _thenStartPath);
@@ -171,7 +173,7 @@ casper.thenOpen(_baseURL + _thenStartPath, function (response) {
 });
 
 //Then loop over all pages of the application to capture pdfs
-//casper.then(casper.pghGetApplicationPages);
+casper.then(casper.pghGetApplicationPages);
 
 casper.run();
 
