@@ -127,8 +127,6 @@ casper.pghGetApplicationPages = function() {
 
 };
 
-
-
 //login page
 casper.start(_loginURL, function () {
 
@@ -149,31 +147,18 @@ casper.start(_loginURL, function () {
 
 //Set the paper size for screenshots
 casper.page.paperSize = {
-    height: '11in', width: '8.5in', orientation: 'portrait', border: '0.4in'
+    height: '11in', width: '8.5in', orientation: 'portrait', margin: '0.4in',
+    footer: {
+        height: "0.9in",
+        contents: phantom.callback(function (pageNum, numPages) {
+           // if (pageNum == numPages) {
+           //     return "";
+           // }
+            return '<p style="font-size: .8em; text-align:center; padding-top: 50px;">PDF created on ' + dateString + '. Page ' + pageNum + ' of ' + numPages + '.</p>';
+        })
+    }
+
 };
-
-
-/*casper.then(function() {
-
- //create array of applications to visit
- var appids = ['1637333','1637333'];
- var i;
- //Loop each id to visit, and process each page of the application
- this.each(appids, function() {
- i++; // change the link being opened (has to be here specifically)
- this.thenOpen((_baseURL + '/application/' + appids[i]), function(response) {
- if (response['status'] === 200) {
- console.log('On first page of application. Response ' + response['status']);
- console.log(_baseURL + '/application/' + appids[i]);
- casper.pghGetApplicationPages;
-
- } else {
- console.log('Error ' + response['status'] + ' url ' + _baseURL + '/application/' + appids[i]);
- return FALSE;
- }
- });
- });
- });*/
 
 
 //Load the application before we begin looking for pages.
@@ -193,19 +178,3 @@ casper.thenOpen(_baseURL + _thenStartPath, function (response) {
 
 
 casper.run();
-
-
-/*casper.then(function () {
-
- this.waitUntilVisible('.print-page',
- function () {
- console.log('Looks like .print-page is there');
-
-
-
- },
- function timeout() { // step to execute if check has failed
- console.log('Could not load element .print-page').exit();
- }
- );
- }*/
