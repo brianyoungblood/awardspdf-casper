@@ -14,10 +14,10 @@ script has several areas that needs editing for environment you are on. tested o
 
 run:
 ```
-casperjs clickwhilenext.js --user=[username] --password=[password] --siteurl="[siteurl]" --appid=[appid] --savepath="[startpath]"
+casperjs pdfapps.js --user=[username] --password=[password] --siteurl="[siteurl]" --appid=[appid] --savepath="[startpath]"
 ```
 
 wrapper:
 ```
-clickwhilenext.sh '1234 12345'
+./pdfapps.sh --username="user@example.com" --password="xxx" --savepath="~/Downloads" --siteurl="https://example.com" --nids="1160629 " --recreate
 ```
